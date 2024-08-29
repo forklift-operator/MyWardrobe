@@ -68,6 +68,8 @@
     </nav>
 
     <div class="main-content">
+            
+        <section class="wardrobe-sect">
             <main class="wardrobe-content">
                 <header class="header">
                     <h1 class="section-header">Wardrobe</h1>
@@ -80,13 +82,36 @@
                         <button class="filter" wardrobe-filter="other">Other</button>
                     </div>
                 </header>
-
+                
                 <div id="cardsContainer" class="item-cards-container">
                     
                 </div>
             </main>
-    </div>
+        </section>
+        <section class="outfits" style="display: none;">
 
+            <main class="outfits-content">
+                
+                <header class="header">
+                    <h1 class="section-header">Outfits</h1>
+                        <div class="outfits-filter-container">
+                            <button class="filter selected" outfits-filter="all">All</button>
+                            <button class="filter" outfits-filter="spring">Spring</button>
+                            <button class="filter" outfits-filter="summer">Summer</button>
+                            <button class="filter" outfits-filter="fall">Fall</button>
+                            <button class="filter" outfits-filter="winter">Winter</button>
+                        </div>
+                    </header>
+                    
+                    <div id="cardsContainer" class="item-cards-container">
+                        
+                    </div>
+                </main>
+                
+            </main>
+        </section>
+    </div>
+        
     <script src="scripts/script.js"></script>
 </body>
 </html>

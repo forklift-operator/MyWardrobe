@@ -45,7 +45,7 @@ app.post('/register', async(req,res)=>{
         const newUser = new User({ username, password: hashedPassword });
         await newUser.save();
         req.session.userId = newUser._id;
-        res.redirect('/wardrobe');
+        res.redirect('/');
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).json({ message: 'Error registering user' });
@@ -59,7 +59,7 @@ app.post('/login', async(req,res)=>{
 
     if (user && await bcrypt.compare(password, user.password)) { //
         req.session.userId = user._id;
-        res.redirect('/wardrobe');
+        res.redirect('/');
     }else {
         res.status(401).json({message:'Invalid credentials'})
     }
@@ -86,18 +86,18 @@ app.get('/', (req,res)=>{
     if (req.session.userId) {
         // User is authenticated
         console.log("User is authenticated")
-        res.redirect('/wardrobe');  // Redirect to wardrobe page if authenticated
+        res.sendFile(path.join(__dirname,'public','main.html'));
     } else {
         res.redirect('/login');  // Redirect to login page if not authenticated
     }
 })
 
 app.get('/wardrobe', isAuthenticated, (req,res)=>{
-    res.sendFile(path.join(__dirname,'public','wardrobe.html'))
+    res.sendFile(path.join(__dirname,'public','content-sections','wardrobe.html'))
 })
 
 app.get('/outfits', isAuthenticated, (req,res)=>{
-    res.sendFile(path.join(__dirname,'public','outfits.html'));
+    res.sendFile(path.join(__dirname,'public','content-sections','outfits.html'));
 })
 
 app.get('/cards', isAuthenticated, async (req, res) => {
@@ -105,11 +105,11 @@ app.get('/cards', isAuthenticated, async (req, res) => {
     res.json(cards);
 });
 
-app.get('/login', isAuthenticated, (req,res)=>{
+app.get('/login', (req,res)=>{
     res.sendFile(path.join(__dirname,'public','login.html'))
 })
 
-app.get('/register', isAuthenticated, (req,res)=>{
+app.get('/register', (req,res)=>{
     res.sendFile(path.join(__dirname,'public','register.html'));
 })
 

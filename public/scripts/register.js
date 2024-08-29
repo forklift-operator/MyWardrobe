@@ -13,7 +13,7 @@ async function handleRegister(event) {
 
     try {
         // Send a POST request to the server
-        const response = await fetch('/register', {
+        const response = await fetch('/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ async function handleRegister(event) {
 
         if (response.ok) {
             // Redirect to the wardrobe page on success
-            window.location.href = '/wardrobe';
+            window.location.href = '/';
             
         } else {
             // Handle errors

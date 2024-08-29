@@ -23,7 +23,7 @@ async function handleLogin(event) {
 
         if (response.ok) {
             // Redirect to the wardrobe page on success
-            window.location.href = '/wardrobe';
+            window.location.href = '/';
         } else {
             // Handle errors
             const result = await response.json();

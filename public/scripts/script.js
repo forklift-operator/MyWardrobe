@@ -10,18 +10,20 @@ navbar_buttons.forEach(btn => {
         navbar_buttons.forEach(btn=>btn.classList.remove('active'));
         btn.classList.add('active');
         const target = btn.getAttribute('data-target');
-        if (target) {   
-            navigateTo(target);
-        }
+        // if (target) {   
+        //     navigateTo(target);
+        // }
     })
 })
 
-function navigateTo(target){
-    fetch(`/${target}`)
-    .then(response => response.text())
-    .then(html => document.querySelector('main-content').innerHTML = html);
-
-}
+// function navigateTo(target) {
+//     fetch(`/${target}`)
+//         .then(response => response.text())
+//         .then(html => {
+//             main_content.innerHTML = html;  
+//         })
+//         .catch(error => console.error('Error loading content:', error));
+// }
 
 
 // handle add item to wardrobe modal 
@@ -103,7 +105,7 @@ async function loadCards() {
     const response = await fetch('/cards', {
         method: 'GET',
         headers: {
-            'Content-Type': 'aplications/json'
+            'Content-Type': 'application/json' 
         }
     })
     if (response.ok) {
@@ -207,5 +209,3 @@ document.getElementById('detailsForm').addEventListener('submit', async function
     document.querySelector('.add-img-container .h3').innerHTML = "Add Image";
     this.reset();
 });
-
-
