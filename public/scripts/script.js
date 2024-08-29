@@ -1,8 +1,7 @@
 
 // Navbar handling
-const navbar = document.querySelector('.nav-bar');
 const main_content = document.querySelector('.main-content');
-const navbar_buttons = document.querySelectorAll('.nav-btn')
+const navbar_buttons = document.querySelectorAll('.nav-btn');
 
 navbar_buttons.forEach(btn => {
     btn.addEventListener('click', (event)=>{
@@ -11,10 +10,21 @@ navbar_buttons.forEach(btn => {
         btn.classList.add('active');
         const target = btn.getAttribute('data-target');
         // if (target) {   
-        //     navigateTo(target);
-        // }
+            //     navigateTo(target);
+            // }
+        })
+})
+    
+const logout_btn = document.querySelector('.logout-btn');
+logout_btn.addEventListener('click',async ()=>{
+    fetch('/logout', {method: "GET"})
+    .then(res => {
+        if(res.redirected){
+            window.location.href = res.url;
+        }
     })
 })
+
 
 // function navigateTo(target) {
 //     fetch(`/${target}`)
@@ -60,7 +70,7 @@ window.addEventListener('keydown', (event) => {
     }
 })
 
-// setting btn to logout
+// setting btn to logout_btn
 
 
 

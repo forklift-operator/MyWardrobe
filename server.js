@@ -92,14 +92,6 @@ app.get('/', (req,res)=>{
     }
 })
 
-app.get('/wardrobe', isAuthenticated, (req,res)=>{
-    res.sendFile(path.join(__dirname,'public','content-sections','wardrobe.html'))
-})
-
-app.get('/outfits', isAuthenticated, (req,res)=>{
-    res.sendFile(path.join(__dirname,'public','content-sections','outfits.html'));
-})
-
 app.get('/cards', isAuthenticated, async (req, res) => {
     const cards = await Card.find({ userId: req.session.userId });
     res.json(cards);
@@ -112,6 +104,21 @@ app.get('/login', (req,res)=>{
 app.get('/register', (req,res)=>{
     res.sendFile(path.join(__dirname,'public','register.html'));
 })
+
+app.get('/logout', (req, res) => {
+    if (req.session) {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.status(500).send('Failed to log out');
+            }
+            res.clearCookie('connect.sid');
+            res.redirect('/login');
+        });
+    } else {
+        res.redirect('/login'); 
+    }
+});
 
 
 // ERROR HANDLING AND APP START
