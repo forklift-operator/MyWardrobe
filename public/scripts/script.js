@@ -4,15 +4,17 @@ const main_content = document.querySelector('.main-content');
 const navbar_buttons = document.querySelectorAll('.nav-btn');
 
 navbar_buttons.forEach(btn => {
-    btn.addEventListener('click', (event)=>{
-        navbar_buttons.forEach(btn=>btn.classList.remove('active'));
-        btn.classList.add('active');
-        const target = btn.getAttribute('data-target');
-        console.log(target);
-        if (target) {   
+    if(btn!=document.querySelector('.add-btn')){
+        btn.addEventListener('click', (event)=>{
+            navbar_buttons.forEach(btn=>btn.classList.remove('active'));
+            btn.classList.add('active');
+            const target = btn.getAttribute('data-target');
+            console.log(target);
+            if (target) {   
                 navigateTo(target);
             }
         })
+    }
 })
     
 
@@ -27,6 +29,7 @@ function navigateTo(target) {
             sec.classList.add('active');
         }
     })
+    displayCards(cards);
 }
 
 const logout_btn = document.querySelector('.logout-btn');
@@ -38,6 +41,7 @@ logout_btn.addEventListener('click',async ()=>{
         }
     })
 })
+
 
 // handle add item to wardrobe modal 
 const form_container = document.querySelector('.form-container');
@@ -157,7 +161,7 @@ wardrobe_filters.forEach((filter)=>{
 
 
 //display tagged cards  
-function displayCards(cards, tag) {
+function displayCards(cards, tag='all') {
     const cardContainer = document.getElementById('cardsContainer');
     cardContainer.innerHTML = ''; 
 
