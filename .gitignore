@@ -1,0 +1,7 @@
+.vscode
+/node_modules
+/db
+/test
+/prev
+package-lock.json
+package.json

@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>My Wardrobe</title>
+</head>
+<body>
+    <div class="form-container">
+        
+        <div class="form-content">
+            <h2>Enter Your Details</h2>
+                <form id="detailsForm" style="display: flex; flex-direction: row; margin:0">
+                    <div class="add-img-container">
+                        <button class="add-img-btn">
+                            <div><img src="/navbar/plus-large-svgrepo-com.svg" alt="Add"></div>
+                            <h3 class="h3">Add Image</h3>
+                        </button>
+                        <input type="file" id="add-img-file" name="file" accept="image/*" style="display: none;" required><br><br>
+                    </div>
+                    <div class="clothing-details">
+                        <input type="text" id="name" name="name" placeholder="Name" required><br><br>
+                        <input type="text" id="description" name="description" placeholder="Short description"><br><br>
+                        <select id="tags" name="tags" required>
+                            <option value="tops">Tops</option>
+                            <option value="bottoms">Bottoms</option>
+                            <option value="shoes">Shoes</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="other">Other</option>
+                        </select><br><br>
+                        <button type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav-bar">
+        <div class="logo">
+            <h1>My Wardrobe</h1>
+        </div>
+        <div class="nav-bar-btn-container" >
+            <button class="nav-btn add-btn" >
+                <div><img src="/navbar/plus-large-svgrepo-com.svg" alt="Add" class="icon"></div>
+                <h3 class="navbar-text">Add Item</h3>
+            </button>
+            <button class="nav-btn wardrobe-btn active" data-target="wardrobe">
+                <div><img src="/navbar/closet-svgrepo-com.svg" alt="outfits" class="icon"></div>
+                <h3 class="navbar-text">My Wardrobe</h3>
+            </button>
+            <button class="nav-btn outfits-btn" data-target="outfits">
+                <div><img src="/navbar/clothes-svgrepo-com.svg" alt="outfits" class="icon"></div>
+                <h3 class="navbar-text">Outfits</h3>
+            </button>
+            <button class="nav-btn social-btn" data-target="social">
+                <div><img src="/navbar/community-group-leader-svgrepo-com.svg" alt="Community" class="icon"></div>
+                <h3 class="navbar-text">Community</h3>
+            </button>
+            <button class="nav-btn account-btn" data-target="account">
+                <div><img src="/navbar/community-group-leader-svgrepo-com.svg" alt="Community" class="icon"></div>
+                <h3 class="navbar-text">Account</h3>
+            </button>
+            <button class="nav-btn settings-btn" data-target="settings">
+                <div><img src="/navbar/community-group-leader-svgrepo-com.svg" alt="Community" class="icon"></div>
+                <h3 class="navbar-text">Settings</h3>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+            <main class="wardrobe-content">
+                <header class="header">
+                    <h1 class="section-header">Wardrobe</h1>
+                    <div class="wardrobe-filter-container">
+                        <button class="filter selected" wardrobe-filter="all">All</button>
+                        <button class="filter" wardrobe-filter="tops">Tops</button>
+                        <button class="filter" wardrobe-filter="bottoms">Bottoms</button>
+                        <button class="filter" wardrobe-filter="shoes">Shoes</button>
+                        <button class="filter" wardrobe-filter="accessories">Accessories</button>
+                        <button class="filter" wardrobe-filter="other">Other</button>
+                    </div>
+                </header>
+
+                <div id="cardsContainer" class="item-cards-container">
+                    
+                </div>
+            </main>
+    </div>
+
+    <script src="scripts/script.js"></script>
+</body>
+</html>
