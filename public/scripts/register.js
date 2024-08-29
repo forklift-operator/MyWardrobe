@@ -13,7 +13,7 @@ async function handleRegister(event) {
 
     try {
         // Send a POST request to the server
-        const response = await fetch('/', {
+        const response = await fetch('/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

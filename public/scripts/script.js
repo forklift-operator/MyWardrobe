@@ -5,16 +5,30 @@ const navbar_buttons = document.querySelectorAll('.nav-btn');
 
 navbar_buttons.forEach(btn => {
     btn.addEventListener('click', (event)=>{
-        event.preventDefault();
         navbar_buttons.forEach(btn=>btn.classList.remove('active'));
         btn.classList.add('active');
         const target = btn.getAttribute('data-target');
-        // if (target) {   
-            //     navigateTo(target);
-            // }
+        console.log(target);
+        if (target) {   
+                navigateTo(target);
+            }
         })
 })
     
+
+
+function navigateTo(target) {
+    const sections = document.querySelectorAll('.section');
+    
+    sections.forEach(sec => {
+        sec.classList.remove('active')
+        
+        if(sec.getAttribute('content')===target){
+            sec.classList.add('active');
+        }
+    })
+}
+
 const logout_btn = document.querySelector('.logout-btn');
 logout_btn.addEventListener('click',async ()=>{
     fetch('/logout', {method: "GET"})
@@ -24,17 +38,6 @@ logout_btn.addEventListener('click',async ()=>{
         }
     })
 })
-
-
-// function navigateTo(target) {
-//     fetch(`/${target}`)
-//         .then(response => response.text())
-//         .then(html => {
-//             main_content.innerHTML = html;  
-//         })
-//         .catch(error => console.error('Error loading content:', error));
-// }
-
 
 // handle add item to wardrobe modal 
 const form_container = document.querySelector('.form-container');

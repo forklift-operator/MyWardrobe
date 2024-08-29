@@ -114,6 +114,14 @@ body {
   transition: left 0.3s ease;
 }
 
+section{
+  display: none;
+}
+.section.active{
+  display: block;
+}
+
+
 .nav-bar:hover ~ .main-content {
   left: 220px;
 }
