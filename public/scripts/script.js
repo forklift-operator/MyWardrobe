@@ -3,6 +3,16 @@
 const main_content = document.querySelector('.main-content');
 const navbar_buttons = document.querySelectorAll('.nav-btn');
 
+
+// initial load of cards
+let cardElements = [];
+let cards;
+loadCards()
+.then(()=>{
+    if(cards) displayCards(cards, 'all');
+});
+
+
 navbar_buttons.forEach(btn => {
     if(btn!=document.querySelector('.add-btn')){
         btn.addEventListener('click', (event)=>{
@@ -16,7 +26,6 @@ navbar_buttons.forEach(btn => {
         })
     }
 })
-    
 
 
 function navigateTo(target) {
@@ -41,6 +50,67 @@ logout_btn.addEventListener('click',async ()=>{
         }
     })
 })
+
+//cards animations
+function handleCardClick(card) {
+    console.log("clicked card");
+
+    const cardRect = card.getBoundingClientRect();
+    
+
+    cardPreviewBox = document.createElement('div');
+    cardPreviewBox.classList.add('preview-box');
+    
+
+    const clone = card.cloneNode(true);
+    clone.classList.add('clone'); 
+    clone.style.position = 'absolute';
+    clone.style.top = `${cardRect.top}px`;
+    clone.style.left = `${cardRect.left}px`;
+    clone.style.zIndex = '1000';
+
+    cardPreviewBox.appendChild(clone);
+
+    document.body.append(cardPreviewBox);
+
+    setTimeout(()=>{
+        cardPreviewBox.style.backdropFilter = `blur(3px)`
+        cardPreviewBox.style.backgroundColor = `rgba(0,0,0,0.4)`
+        clone.classList.add('preview');
+        clone.style.top = '50%';
+        clone.style.left = '50%';
+
+    },10);
+
+    function closePreview(){
+        console.log("close prev");
+        
+        clone.classList.remove('preview');
+        clone.style.top = `${cardRect.top}px`;
+        clone.style.left = `${cardRect.left}px`;
+        cardPreviewBox.style.backdropFilter = `blur(0px)`
+        cardPreviewBox.style.backgroundColor = `rgba(0,0,0,0)`
+        setTimeout(() => {
+            cardPreviewBox.remove();
+        }, 300);
+        document.removeEventListener('click', handleOutsideClick);
+    }
+
+    function handleOutsideClick(event) {
+        if (event.target === cardPreviewBox) {  // Check if the click is outside the clone
+            closePreview();
+        }
+    }
+
+    document.addEventListener('click', handleOutsideClick);
+
+    document.addEventListener('keydown', (event)=>{
+        if(event.key === "Escape"){
+            closePreview();
+        }
+    })
+}
+
 
 
 // handle add item to wardrobe modal 
@@ -77,8 +147,6 @@ window.addEventListener('keydown', (event) => {
     }
 })
 
-// setting btn to logout_btn
-
 
 
 // add imgage to details
@@ -109,12 +177,6 @@ document.getElementById('add-img-file').addEventListener('change', (event) => {
 
 
 
-// initial load of cards
-let cards;
-loadCards()
-.then(()=>{
-    if(cards) displayCards(cards, 'all');
-});
 
 
 // card loader
@@ -168,16 +230,23 @@ function displayCards(cards, tag='all') {
     cards.forEach(card => {
         if (tag ==='all' || card.tag === tag) {
             
-            const cardElement = document.createElement('div');
             
+            const cardElement = document.createElement('div');
             cardElement.className = 'card';
             cardElement.setAttribute('wardrobe-category', card.tag)
-            cardElement.innerHTML = `<div class="card-thumbnail" style="background-image: url(data:image/jpeg;base64,${card.image})"></div>
+            cardElement.innerHTML = `
+            <div class="card-thumbnail" style="background-image: url(data:image/jpeg;base64,${card.image})"></div>
+            <div class="text">
             <h2 class="card-title">${card.name}</h2>
-            <p class="card-tag">${card.tag}</p>`;
+            <p class="card-description" style="">${card.description}</p>
+            <p class="card-tag">${card.tag}</p>
+            </div>`;
             cardContainer.appendChild(cardElement);
+            
+            cardElement.addEventListener('click', () => handleCardClick(cardElement));
         }
     });
+    
 }
  
 // card creator
@@ -218,9 +287,10 @@ document.getElementById('detailsForm').addEventListener('submit', async function
             cardContainer.appendChild(card);
         })
     }
-
-        
+    
+    
     await loadCards();
+    displayCards(cards);
     hideFormContainer();
     document.querySelector('.add-img-container').style.backgroundImage = '';
     document.querySelector('.add-img-container .h3').innerHTML = "Add Image";
