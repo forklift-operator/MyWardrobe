@@ -1,3 +1,7 @@
+:root{
+  --bg-color:hsl(278, 47%, 93%);
+}
+
 html,
 body {
   padding: 0;
@@ -7,7 +11,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-color: #f0e6f6;
+  background-color: var(--bg-color);
 }
 
 .nav-bar {
@@ -18,7 +22,7 @@ body {
   text-wrap: nowrap;
   display: flex;
   flex-direction: column;
-  background-color: #f0e6f6;
+  background-color: var(--bg-color);
   padding: 10px;
   transition: width 0.3s ease;
 }
@@ -149,7 +153,7 @@ section {
 }
 
 .filter {
-  background-color: #f0e6f6;
+  background-color: var(--bg-color);
   font-size: 14px;
   border: none;
   padding: 5 10 5 10;
@@ -184,14 +188,14 @@ section {
 }
 
 .item-cards-container::-webkit-scrollbar-track {
-  background: #f0e6f6; /* Color of the scrollbar track */
+  background: var(--bg-color); /* Color of the scrollbar track */
   border-radius: 10px; /* Round the edges of the track */
 }
 
 .item-cards-container::-webkit-scrollbar-thumb {
   background-color: #cdb1df; /* Color of the scrollbar thumb */
   border-radius: 10px; /* Round the edges of the scrollbar thumb */
-  border: 3px solid #f0e6f6; /* Adds a border to the scrollbar thumb for visual effect */
+  border: 3px solid var(--bg-color); /* Adds a border to the scrollbar thumb for visual effect */
 }
 
 .item-cards-container::-webkit-scrollbar-thumb:hover {
@@ -273,6 +277,10 @@ section {
     align-self: flex-start; /* Align text to the start (left) */
     transition: all 0.3s ease; /* Smooth transition for appearance */
   }
+
+  .card-delete{
+    display: block;
+  }
 }
 
 .card:active {
@@ -320,6 +328,21 @@ section {
   font-size: 12px;
   margin: 0;
   transition: all 0.3s;
+}
+
+.card-delete {
+  display: none;
+  margin-top: 20px;
+  font-size: 12px;
+  background-color: hsl(3, 66%, 62%);
+  height: 24px;
+  border-radius: 10px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.card-delete:hover{
+  background-color: hsl(3, 66%, 52%);;
 }
 
 .form-container {

@@ -77,7 +77,8 @@ app.post('/add',upload.single('image'), async (req,res)=>{
     
     await newCard.save();
     res.json(newCard);
-    console.log("Received JSON data:", { image ,name, description, tag });
+    const id = newCard._id;
+    console.log("Received JSON data:", {id, name, description, tag });
 })
 
 
@@ -120,6 +121,13 @@ app.get('/logout', (req, res) => {
     }
 });
 
+app.delete('/delete/:id', isAuthenticated, async(req,res) => {
+    const { id } = req.params;
+    const cards = await Card.findOneAndDelete({_id:id})
+    console.log("Deleted card: ", id)
+    res.status(200).send({ message: 'Card deleted successfully' });
+
+})
 
 // ERROR HANDLING AND APP START
 app.use((err, req, res, next) => {

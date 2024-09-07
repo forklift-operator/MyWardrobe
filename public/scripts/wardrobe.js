@@ -1,55 +1,31 @@
-
-// Navbar handling
-const main_content = document.querySelector('.main-content');
-const navbar_buttons = document.querySelectorAll('.nav-btn');
-
-
-// initial load of cards
-let cardElements = [];
-let cards;
-loadCards()
-.then(()=>{
-    if(cards) displayCards(cards, 'all');
-});
-
-
-navbar_buttons.forEach(btn => {
-    if(btn!=document.querySelector('.add-btn')){
-        btn.addEventListener('click', (event)=>{
-            navbar_buttons.forEach(btn=>btn.classList.remove('active'));
-            btn.classList.add('active');
-            const target = btn.getAttribute('data-target');
-            console.log(target);
-            if (target) {   
-                navigateTo(target);
-            }
+// handle filtering
+const select_filter = () => {
+    document.querySelectorAll('.filter').forEach((filter)=>{
+        filter.addEventListener('click', ()=>{
+            const tag = filter.getAttribute('wardrobe-filter');
+            document.querySelectorAll('.filter').forEach(btn=>btn.classList.remove('selected'))
+            filter.classList.add('selected');
+            displayCards(cards, tag);
         })
-    }
-})
-
-
-function navigateTo(target) {
-    const sections = document.querySelectorAll('.section');
-    
-    sections.forEach(sec => {
-        sec.classList.remove('active')
-        
-        if(sec.getAttribute('content')===target){
-            sec.classList.add('active');
-        }
     })
-    displayCards(cards);
 }
 
-const logout_btn = document.querySelector('.logout-btn');
-logout_btn.addEventListener('click',async ()=>{
-    fetch('/logout', {method: "GET"})
-    .then(res => {
-        if(res.redirected){
-            window.location.href = res.url;
+select_filter();
+    
+
+// Deleting cards
+const deleteCard = (id)=>{
+    fetch(`/delete/${id}`,{
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log(`Card with ID ${id} deleted successfully.`);
+        } else {
+            console.log('Failed to delete card.');
         }
     })
-})
+}
 
 //cards animations
 function handleCardClick(card) {
@@ -70,6 +46,16 @@ function handleCardClick(card) {
     clone.style.zIndex = '1000';
 
     cardPreviewBox.appendChild(clone);
+
+    // Delete button functionality
+    clone.addEventListener('click', (event)=>{
+        if (event.target.classList.contains('card-delete')) {
+            closePreview();
+            console.log("Deleting card with ID:", clone.id);
+            setTimeout(() => document.getElementById(clone.id).remove(), 320)
+            deleteCard(clone.id);
+        }
+    });
 
     document.body.append(cardPreviewBox);
 
@@ -112,73 +98,6 @@ function handleCardClick(card) {
 }
 
 
-
-// handle add item to wardrobe modal 
-const form_container = document.querySelector('.form-container');
-
-const showFormContainer = () => {
-    form_container.style.display = 'block';
-    setTimeout(()=>{
-        form_container.classList.add('show');
-    }, 10)
-}
-
-const hideFormContainer = () => {
-    form_container.classList.remove('show');
-    setTimeout(()=>{
-        form_container.style.display = 'none';
-    },600);
-}
-
-const add_item_btn = document.querySelector('.add-btn');
-add_item_btn.addEventListener('click', ()=> {
-    form_container.focus();
-    showFormContainer();
-})
-form_container.addEventListener('click', (e)=>{
-    if (e.target === form_container) {
-        hideFormContainer();
-    }
-})
-
-window.addEventListener('keydown', (event) => {
-    if (event.key === "Escape") {
-        hideFormContainer();
-    }
-})
-
-
-
-// add imgage to details
-document.querySelector('.add-img-btn').addEventListener('click', (event)=>{
-    event.preventDefault()
-    document.getElementById('add-img-file').click();
-})
-document.getElementById('add-img-file').addEventListener('change', (event) => {
-    event.preventDefault()
-
-    const file = event.target.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-
-        reader.onload = (e) =>{
-            const addImageContainer = document.querySelector('.add-img-container');
-            // Set the background of the div to the uploaded image
-            addImageContainer.style.backgroundImage = `url('${e.target.result}')`;
-            addImageContainer.style.backgroundSize = 'cover';
-            addImageContainer.style.backgroundPosition = 'center';
-            document.querySelector('.add-img-btn .h3').innerHTML = event.target.files[0].name;
-        }
-        reader.readAsDataURL(file);
-    }
-})
-
-
-
-
-
-
 // card loader
 async function loadCards() {
     const response = await fetch('/cards', {
@@ -190,56 +109,42 @@ async function loadCards() {
     if (response.ok) {
         cards = await response.json();
         console.log("Loading cards complete!");
-        console.log(cards);
-        
     }else {console.log("Error loading cards!");}
 }
 
+// initial load of cards
+let cardElements = [];
+let cards;
+loadCards()
+.then(()=>{
+    if(cards) {
+        displayCards(cards, 'all');
+    }
+});
 
-
-// filter card container content
-const filterContent = (cards, filter) => {
-    
-    cards.forEach(card => {
-        if (filter === 'all' || card.getAttribute('wardrobe-category') === filter) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-};
-
-
-// handle filtering
-const wardrobe_filters = document.querySelectorAll('.filter');
-wardrobe_filters.forEach((filter)=>{
-    filter.addEventListener('click', ()=>{
-        const tag = filter.getAttribute('wardrobe-filter');
-        wardrobe_filters.forEach(btn=>btn.classList.remove('selected'))
-        filter.classList.add('selected');
-        displayCards(cards, tag);
-    })
-})
 
 
 //display tagged cards  
-function displayCards(cards, tag='all') {
+async function displayCards(cards, tag='all') {
+
     const cardContainer = document.getElementById('cardsContainer');
     cardContainer.innerHTML = ''; 
-
+    
     cards.forEach(card => {
         if (tag ==='all' || card.tag === tag) {
             
             
             const cardElement = document.createElement('div');
             cardElement.className = 'card';
+            cardElement.setAttribute('id', card._id);
             cardElement.setAttribute('wardrobe-category', card.tag)
             cardElement.innerHTML = `
             <div class="card-thumbnail" style="background-image: url(data:image/jpeg;base64,${card.image})"></div>
             <div class="text">
             <h2 class="card-title">${card.name}</h2>
-            <p class="card-description" style="">${card.description}</p>
+            <p class="card-description">${card.description}</p>
             <p class="card-tag">${card.tag}</p>
+            <button class="card-delete">Delete</button>
             </div>`;
             cardContainer.appendChild(cardElement);
             
@@ -248,8 +153,9 @@ function displayCards(cards, tag='all') {
     });
     
 }
- 
-// card creator
+
+
+// Adding the cards
 document.getElementById('detailsForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     
@@ -275,11 +181,10 @@ document.getElementById('detailsForm').addEventListener('submit', async function
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Received JSON data:', data);
-
             const cardContainer = document.getElementById('cardsContainer');
             const card = document.createElement('div');
             card.className = 'card';
+            card.setAttribute('id', data._id);
             card.setAttribute('wardrobe-category', data.tag)
             card.innerHTML = `<div class="card-thumbnail" style="background-image: url(data:image/jpeg;base64,${data.image})"></div>
                             <h2 class="card-title">${data.name}</h2>
@@ -288,9 +193,14 @@ document.getElementById('detailsForm').addEventListener('submit', async function
         })
     }
     
+    await loadCards()
+    .then(()=>displayCards(cards))
+    document.querySelectorAll('.filter').forEach(btn=>{
+        if (btn.getAttribute('wardrobe-filter') === 'all') {
+            btn.classList.add('selected');
+        }else btn.classList.remove('selected')
+    })
     
-    await loadCards();
-    displayCards(cards);
     hideFormContainer();
     document.querySelector('.add-img-container').style.backgroundImage = '';
     document.querySelector('.add-img-container .h3').innerHTML = "Add Image";
